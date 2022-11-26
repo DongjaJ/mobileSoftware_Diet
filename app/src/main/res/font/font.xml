@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/bm"/>
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/d2b"/>
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/d2m"/>
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/gmarketb"/>
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/gmarketl"/>
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/gmarketm"/>
+</font-family>

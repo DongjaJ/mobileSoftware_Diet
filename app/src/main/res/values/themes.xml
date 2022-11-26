@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MobileSoftware_project" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/mainYellow</item>
+        <item name="colorPrimaryVariant">@color/mainLightYellow</item>
+        <item name="colorOnPrimary">@color/darkBrown</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/brown</item>
+        <!-- Customize your theme here. -->
+        <!-- font -->
+        <item name="android:fontFamily">@font/gmarketm</item>
+        <!-- Title bar -->
+        <item name="windowNoTitle">true</item>
+    </style>
+</resources>

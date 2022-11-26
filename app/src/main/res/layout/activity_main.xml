@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainLightYellow"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/main_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gmarketb"
+                android:gravity="center"
+                android:paddingBottom="7.5dp"
+                android:text="@string/app_explain"
+                android:textColor="@color/brown"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/main_logo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:fontFamily="@font/gmarketb"
+                android:textColor="@color/darkBrown"
+                android:textSize="32.5sp" />
+        </LinearLayout>
+
+        <android.widget.Button
+            android:id="@+id/main_button_plus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/round_button"
+            android:onClick="goToPlusFood"
+            android:paddingStart="45dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="45dp"
+            android:paddingBottom="15dp"
+            android:text="@string/plus"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/main_button_show"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <android.widget.Button
+            android:id="@+id/main_button_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_button"
+            android:onClick="goTOShowFood"
+            android:paddingStart="45dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="45dp"
+            android:paddingBottom="15dp"
+            android:text="@string/show"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
