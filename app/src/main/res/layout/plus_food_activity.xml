@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainLightYellow"
+    android:onClick="hideKeyboard"
     tools:context=".PlusFoodActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
+        android:id="@+id/constraintLayout"
+        android:layout_width="347dp"
+        android:layout_height="539dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="32dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cons"
@@ -44,10 +40,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@string/app_name"
-                android:textSize="32.5sp"
-                android:textColor="@color/darkBrown"
                 android:fontFamily="@font/gmarketb"
+                android:text="@string/app_name"
+                android:textColor="@color/darkBrown"
+                android:textSize="32.5sp"
 
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/plus_explain" />
@@ -56,14 +52,15 @@
                 android:id="@+id/plus_this"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/show"
-                android:textSize="32.5sp"
+                android:text="@string/plus"
                 android:textColor="@color/darkBrown"
+                android:textSize="32.5sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/plus_logo" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
@@ -72,6 +69,110 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cons">
+
+            <Button
+                android:id="@+id/PopupButton"
+                android:layout_width="65dp"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="#00000000"
+                android:text="식사 종류"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="77dp" />
+
+            <Button
+                android:id="@+id/input"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="16dp"
+                android:background="#00000000"
+                android:text="@string/input"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="275dp" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="127dp"
+                android:layout_height="93dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="#00000000"
+                android:src="@drawable/ic_launcher_background"
+                tools:layout_editor_absoluteX="110dp"
+                tools:layout_editor_absoluteY="16dp" />
+
+            <EditText
+                android:id="@+id/food_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/mainLightYellow"
+                android:ems="10"
+                android:hint="@string/food_name"
+                android:inputType="textPersonName"
+                android:textSize="12sp"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="121dp" />
+
+            <EditText
+                android:id="@+id/food_cnt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="#00000000"
+                android:ems="10"
+                android:hint="@string/food_cnt"
+                android:inputType="number"
+                android:textSize="12sp"
+                tools:layout_editor_absoluteX="175dp"
+                tools:layout_editor_absoluteY="120dp" />
+
+            <EditText
+                android:id="@+id/Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:clickable="true"
+                android:editable="false"
+                android:focusable="false"
+                android:gravity="center"
+                android:hint="date"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="Deprecated"
+                tools:layout_editor_absoluteY="153dp" />
+
+            <EditText
+                android:id="@+id/Time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:editable="false"
+                android:focusable="false"
+                android:gravity="center"
+                android:hint="time"
+                android:textSize="14sp"
+                tools:ignore="Deprecated"
+                tools:layout_editor_absoluteX="175dp"
+                tools:layout_editor_absoluteY="152dp" />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="식사 설명이나 감상"
+                android:inputType="textMultiLine"
+                tools:layout_editor_absoluteX="42dp"
+                tools:layout_editor_absoluteY="285dp" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
