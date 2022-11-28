@@ -148,6 +148,11 @@ public class PlusFoodActivity extends AppCompatActivity {
         return super.onSupportNavigateUp();
     }
 
+    public void gotoBack(View view){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
     public void hideKeyboard(View v)
     {
         InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
