@@ -1,10 +1,12 @@
 package com.cource.mobilesoftware_project;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,5 +29,10 @@ public class ShowCalActivity extends AppCompatActivity {
 
         spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#EC7357")), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         function_text.setText(spannableString);
+    }
+
+    public void goToListView(View view){
+        Intent intent = new Intent(this, ShowListActivity.class);
+        startActivity(intent);
     }
 }
