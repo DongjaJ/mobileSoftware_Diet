@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainLightYellow"
-    android:onClick="hideKeyboard"
     tools:context=".PlusFoodActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -90,7 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <Button
+                    <android.widget.Button
                         android:id="@+id/PopupButton"
                         android:layout_width="65dp"
                         android:layout_height="30dp"
@@ -98,13 +97,16 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="16dp"
                         android:layout_marginBottom="8dp"
-                        android:background="#00000000"
+                        android:background="@color/darkBrown"
+                        android:textColor="@color/mainLightYellow"
                         android:text="식사 종류"
+                        android:autoSizeTextType="uniform"
+                        android:padding="7dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         tools:ignore="MissingConstraints" />
 
-                    <Button
+                    <android.widget.Button
                         android:id="@+id/input"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
@@ -112,8 +114,11 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:background="#00000000"
+                        android:background="@color/darkBrown"
+                        android:textColor="@color/mainLightYellow"
+                        android:padding="7dp"
                         android:text="@string/input"
+                        android:autoSizeTextType="uniform"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -179,7 +184,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="25dp"
                         android:layout_marginEnd="16dp"
-                        android:background="#00000000"
+                        android:background="@color/mainLightYellow"
                         android:ems="10"
                         android:hint="@string/food_cnt"
                         android:inputType="number"
@@ -205,6 +210,7 @@
                         android:focusable="false"
                         android:gravity="center"
                         android:hint="date"
+                        android:background="@color/mainLightYellow"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toStartOf="@+id/Time"
                         app:layout_constraintStart_toStartOf="parent"
@@ -221,6 +227,7 @@
                         android:editable="false"
                         android:focusable="false"
                         android:gravity="center"
+                        android:background="@color/mainLightYellow"
                         android:hint="time"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -235,6 +242,7 @@
                         android:ems="10"
                         android:gravity="start|top"
                         android:hint="식사 설명이나 감상"
+                        android:background="@color/mainLightYellow"
                         android:inputType="textMultiLine"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
