@@ -2,15 +2,23 @@ package com.cource.mobilesoftware_project;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,11 +34,19 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -118,15 +134,78 @@ public class PlusFoodActivity extends AppCompatActivity {
             popupMenu.show();
         });
 
-
         ImageView imageView = findViewById(R.id.imageView);
+        final Bitmap[] img_bitmap = new Bitmap[1];
 
         ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
-                result -> Glide.with(getApplicationContext())
-                        .load(result.getData().getData())
-                        .override(127, 93)
-                        .into(imageView));
+                result -> {
+                    Glide.with(this)
+                            .asBitmap()
+                            .load(result.getData().getData())
+                            .override(127, 93)
+                            .into(new CustomTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                    imageView.setImageBitmap(resource);
+                                    img_bitmap[0] = resource;
+                                }
+                                @Override
+                                public void onLoadCleared(@Nullable Drawable placeholder) {
+                                }
+                            });
+                });
+
+        findViewById(R.id.input).setOnClickListener(view -> {
+
+            String date=((EditText)findViewById(R.id.Date)).getText().toString();
+            String time=((EditText)findViewById(R.id.Time)).getText().toString();
+            String food_category= popupButton.getText().toString();
+            String food_name = ((EditText)findViewById(R.id.food_name)).getText().toString();
+            Integer food_cnt = Integer.parseInt(((EditText)findViewById(R.id.food_cnt)).getText().toString());
+            String food_summary = ((EditText)findViewById(R.id.editTextTextMultiLine)).getText().toString();
+            String img_name= date + time + ".jpg";
+
+            saveBitmapToJpeg(img_bitmap[0], img_name);
+            DietDBManager dbManager = new DietDBManager(this);
+            SQLiteDatabase db = dbManager.getWritableDatabase();
+            ContentValues addValues = new ContentValues();
+            addValues.put("date",date);
+            addValues.put("time",time);
+            addValues.put("food_category",food_category);
+            addValues.put("food_name",food_name);
+            addValues.put("food_cnt",food_cnt);
+            addValues.put("food_summary",food_summary);
+
+            try {
+                String imgpath = getFilesDir() + "/" + img_name;   // 내부 저장소에 저장되어 있는 이미지 경로
+                Bitmap bm = BitmapFactory.decodeFile(imgpath);
+                ImageView imageView2 = findViewById(R.id.imageView2);
+                imageView2.setImageBitmap(bm);   // 내부 저장소에 저장된 이미지를 이미지뷰에 셋
+                Toast.makeText(getApplicationContext(), "파일 로드 성공", Toast.LENGTH_SHORT).show();
+
+                String tmp ="";
+//                tmp += date +"\n"+ time + "\n"+ food_category+"\n" + food_name
+//                        +"\n" + food_summary+"\n"+img_name+"\n";
+
+
+                db.insert("Diet",null,addValues);
+
+                Cursor cursor = db.rawQuery("select date, time, food_category, food_name, food_summary from Diet",null);
+                while(cursor.moveToNext()){
+                    tmp+=cursor.getString(0)+" "+cursor.getString(1)+" "+" "+cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3)+" "+cursor.getString(4)+"\n";
+                }
+
+                ((EditText) findViewById(R.id.editTextTextMultiLine)).setText(tmp);
+
+            }
+            catch (Exception e){
+                Toast.makeText(getApplicationContext(), "파일 로드 실패", Toast.LENGTH_SHORT).show();
+
+            }
+
+
+        });
 
         imageView.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_PICK,
@@ -136,8 +215,34 @@ public class PlusFoodActivity extends AppCompatActivity {
         });
     }
 
+
+
+    private void saveBitmapToJpeg(Bitmap bitmap, String name) {
+        //내부저장소 캐시 경로를 받아옵니다.
+        File storage = getFilesDir();
+        //저장할 파일 이름
+        String fileName = name;
+        //storage 에 파일 인스턴스를 생성합니다.
+        File tempFile = new File(storage, fileName);
+        try {
+            // 자동으로 빈 파일을 생성합니다.
+            tempFile.createNewFile();
+            // 파일을 쓸 수 있는 스트림을 준비합니다.
+            FileOutputStream out = new FileOutputStream(tempFile);
+            // compress 함수를 사용해 스트림에 비트맵을 저장합니다.
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            // 스트림 사용후 닫아줍니다.
+            out.close();
+        } catch (FileNotFoundException e) {
+            Log.e("MyTag","FileNotFoundException : " + e.getMessage());
+        } catch (IOException e) {
+            Log.e("MyTag","IOException : " + e.getMessage());
+        }
+    }
+
+
     private void updateLabel() {
-        String myFormat = "yyyy/MM/dd";    // 출력형식   2021/07/26
+        String myFormat = "yyyy-MM-dd";    // 출력형식   2021/07/26
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);
 
         EditText et_date = (EditText) findViewById(R.id.Date);
