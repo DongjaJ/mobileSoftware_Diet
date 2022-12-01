@@ -38,6 +38,6 @@ public class StartActivity extends AppCompatActivity {
                 startActivity(new Intent(StartActivity.this, MainActivity.class));
                 finish();
             }
-        }, 2000L);
+        }, 3000L);
     }
 }
