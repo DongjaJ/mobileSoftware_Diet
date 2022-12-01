@@ -80,10 +80,6 @@ public class PlusFoodActivity extends AppCompatActivity {
         spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#EC7357")), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         function_text.setText(spannableString);
 
-        if(getSupportActionBar()!=null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
         //날짜 객체 가져옴
         EditText et_Date = findViewById(R.id.Date);
         et_Date.setOnClickListener(v -> new DatePickerDialog(PlusFoodActivity.this, myDatePicker, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show());
@@ -164,7 +160,7 @@ public class PlusFoodActivity extends AppCompatActivity {
             String food_name = ((EditText)findViewById(R.id.food_name)).getText().toString();
             Integer food_cnt = Integer.parseInt(((EditText)findViewById(R.id.food_cnt)).getText().toString());
             String food_summary = ((EditText)findViewById(R.id.editTextTextMultiLine)).getText().toString();
-            String img_name= date + time + ".jpg";
+            String img_name= date + "_"+food_category + ".jpg";
 
             saveBitmapToJpeg(img_bitmap[0], img_name);
             DietDBManager dbManager = new DietDBManager(this);
@@ -175,7 +171,9 @@ public class PlusFoodActivity extends AppCompatActivity {
             addValues.put("food_category",food_category);
             addValues.put("food_name",food_name);
             addValues.put("food_cnt",food_cnt);
-            addValues.put("food_summary",food_summary);
+            addValues.put("food_calory",100);
+;           addValues.put("food_summary",food_summary);
+            addValues.put("img_name", img_name);
 
             try {
                 String imgpath = getFilesDir() + "/" + img_name;   // 내부 저장소에 저장되어 있는 이미지 경로
@@ -185,15 +183,16 @@ public class PlusFoodActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "파일 로드 성공", Toast.LENGTH_SHORT).show();
 
                 String tmp ="";
-//                tmp += date +"\n"+ time + "\n"+ food_category+"\n" + food_name
-//                        +"\n" + food_summary+"\n"+img_name+"\n";
 
 
                 db.insert("Diet",null,addValues);
 
-                Cursor cursor = db.rawQuery("select date, time, food_category, food_name, food_summary from Diet",null);
+                Cursor cursor = db.rawQuery("select * from Diet",null);
                 while(cursor.moveToNext()){
-                    tmp+=cursor.getString(0)+" "+cursor.getString(1)+" "+" "+cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3)+" "+cursor.getString(4)+"\n";
+                    tmp += "id: "+cursor.getInt(0)+"\ndate: "+cursor.getString(1)+"" +
+                            "\ntime: " +cursor.getString(2)+"\nfood_category: "+cursor.getString(3)+
+                            "\nfood_name: " +cursor.getString(4) +"\nfood_cnt: "+cursor.getInt(5)+"\nfood_calory: "+cursor.getInt(6)
+                            +"\nfood_summary: " + cursor.getString(7) +"\nimg_name: " + cursor.getString(8)+"\n";
                 }
 
                 ((EditText) findViewById(R.id.editTextTextMultiLine)).setText(tmp);
@@ -245,14 +244,8 @@ public class PlusFoodActivity extends AppCompatActivity {
         String myFormat = "yyyy-MM-dd";    // 출력형식   2021/07/26
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);
 
-        EditText et_date = (EditText) findViewById(R.id.Date);
+        EditText et_date = findViewById(R.id.Date);
         et_date.setText(sdf.format(myCalendar.getTime()));
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return super.onSupportNavigateUp();
     }
 
     public void gotoBack(View view){
@@ -260,6 +253,7 @@ public class PlusFoodActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //다른 곳 누르면 키보드 내리는 함수
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         View focusView = getCurrentFocus();
