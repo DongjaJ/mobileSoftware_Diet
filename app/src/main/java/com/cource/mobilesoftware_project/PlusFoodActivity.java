@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -43,6 +44,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -110,21 +112,14 @@ public class PlusFoodActivity extends AppCompatActivity {
             final PopupMenu popupMenu = new PopupMenu(getApplicationContext(),view);
             getMenuInflater().inflate(R.menu.meal_main,popupMenu.getMenu());
             popupMenu.setOnMenuItemClickListener(menuItem -> {
-                if (menuItem.getItemId() == R.id.morning){
+                if (menuItem.getItemId() == R.id.morning)
                     popupButton.setText(R.string.morning);
-                    Toast.makeText(PlusFoodActivity.this, "아침 클릭", Toast.LENGTH_SHORT).show();
-                }else if (menuItem.getItemId() == R.id.lunch){
+                else if (menuItem.getItemId() == R.id.lunch)
                     popupButton.setText(R.string.lunch);
-                    Toast.makeText(PlusFoodActivity.this, "점심 클릭", Toast.LENGTH_SHORT).show();
-                }else if(menuItem.getItemId() == R.id.dinner){
+                else if(menuItem.getItemId() == R.id.dinner)
                     popupButton.setText(R.string.dinner);
-                    Toast.makeText(PlusFoodActivity.this, "저녁 클릭", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                else
                     popupButton.setText(R.string.snack);
-                    Toast.makeText(PlusFoodActivity.this, "간식 클릭", Toast.LENGTH_SHORT).show();
-                }
-
                 return false;
             });
             popupMenu.show();
@@ -154,15 +149,29 @@ public class PlusFoodActivity extends AppCompatActivity {
 
         findViewById(R.id.input).setOnClickListener(view -> {
 
+            final Bundle bundle = new Bundle();
+
             String date=((EditText)findViewById(R.id.Date)).getText().toString();
+            bundle.putString("date",date);
             String time=((EditText)findViewById(R.id.Time)).getText().toString();
+            bundle.putString("time",time);
             String food_category= popupButton.getText().toString();
+            bundle.putString("food_category",food_category);
             String food_name = ((EditText)findViewById(R.id.food_name)).getText().toString();
+            bundle.putString("food_name",food_name);
             Integer food_cnt = Integer.parseInt(((EditText)findViewById(R.id.food_cnt)).getText().toString());
+            bundle.putInt("food_cnt",food_cnt);
             String food_summary = ((EditText)findViewById(R.id.editTextTextMultiLine)).getText().toString();
+            bundle.putString("food_summary", food_summary);
             String img_name= date + "_"+food_category + ".jpg";
 
             saveBitmapToJpeg(img_bitmap[0], img_name);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            img_bitmap[0].compress( Bitmap.CompressFormat.JPEG, 100, stream) ;
+            byte[] byteArray = stream.toByteArray() ;
+            bundle.putByteArray("bm", byteArray);
+
             DietDBManager dbManager = new DietDBManager(this);
             SQLiteDatabase db = dbManager.getWritableDatabase();
             ContentValues addValues = new ContentValues();
@@ -171,39 +180,30 @@ public class PlusFoodActivity extends AppCompatActivity {
             addValues.put("food_category",food_category);
             addValues.put("food_name",food_name);
             addValues.put("food_cnt",food_cnt);
-            addValues.put("food_calory",100);
+            addValues.put("food_calory", 100);
 ;           addValues.put("food_summary",food_summary);
             addValues.put("img_name", img_name);
 
             try {
-                String imgpath = getFilesDir() + "/" + img_name;   // 내부 저장소에 저장되어 있는 이미지 경로
-                Bitmap bm = BitmapFactory.decodeFile(imgpath);
-                ImageView imageView2 = findViewById(R.id.imageView2);
-                imageView2.setImageBitmap(bm);   // 내부 저장소에 저장된 이미지를 이미지뷰에 셋
                 Toast.makeText(getApplicationContext(), "파일 로드 성공", Toast.LENGTH_SHORT).show();
 
-                String tmp ="";
-
-
                 db.insert("Diet",null,addValues);
-
-                Cursor cursor = db.rawQuery("select * from Diet",null);
-                while(cursor.moveToNext()){
-                    tmp += "id: "+cursor.getInt(0)+"\ndate: "+cursor.getString(1)+"" +
-                            "\ntime: " +cursor.getString(2)+"\nfood_category: "+cursor.getString(3)+
-                            "\nfood_name: " +cursor.getString(4) +"\nfood_cnt: "+cursor.getInt(5)+"\nfood_calory: "+cursor.getInt(6)
-                            +"\nfood_summary: " + cursor.getString(7) +"\nimg_name: " + cursor.getString(8)+"\n";
-                }
-
-                ((EditText) findViewById(R.id.editTextTextMultiLine)).setText(tmp);
+                CustomPopupPlus customDialog = new CustomPopupPlus(PlusFoodActivity.this,bundle);
+                customDialog.show();
+//                Cursor cursor = db.rawQuery("select * from Diet",null);
+//                while(cursor.moveToNext()){
+//                    tmp += "id: "+cursor.getInt(0)+"\ndate: "+cursor.getString(1)+"" +
+//                            "\ntime: " +cursor.getString(2)+"\nfood_category: "+cursor.getString(3)+
+//                            "\nfood_name: " +cursor.getString(4) +"\nfood_cnt: "+cursor.getInt(5)+"\nfood_calory: "+cursor.getInt(6)
+//                            +"\nfood_summary: " + cursor.getString(7) +"\nimg_name: " + cursor.getString(8)+"\n";
+//                }
+//
+//                ((EditText) findViewById(R.id.editTextTextMultiLine)).setText(tmp);
 
             }
             catch (Exception e){
                 Toast.makeText(getApplicationContext(), "파일 로드 실패", Toast.LENGTH_SHORT).show();
-
             }
-
-
         });
 
         imageView.setOnClickListener(view -> {
