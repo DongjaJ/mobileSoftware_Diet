@@ -160,13 +160,13 @@ public class ShowListActivity extends AppCompatActivity {
     }
 
     public void btnOnclick(View view) {
-        switch (view.getId()){
-            case R.id.button:
+//        switch (view.getId()){
+//            case R.id.button:
 //                customPopupPlus = new CustomPopupPlus(this,"다이어로그에 들어갈 내용입니다.");
 //                customPopupPlus.show();
-                break;
+//                break;
 
-        }
+//        }
     }
 
     private void saveBitmapToJpeg(Bitmap bitmap, String name) {
