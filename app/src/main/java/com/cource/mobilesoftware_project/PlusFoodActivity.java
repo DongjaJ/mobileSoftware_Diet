@@ -163,7 +163,7 @@ public class PlusFoodActivity extends AppCompatActivity {
             bundle.putInt("food_cnt",food_cnt);
             String food_summary = ((EditText)findViewById(R.id.editTextTextMultiLine)).getText().toString();
             bundle.putString("food_summary", food_summary);
-            String img_name= date + "_"+food_category + ".jpg";
+            String img_name= date + time + "_"+food_category + ".jpg";
 
             saveBitmapToJpeg(img_bitmap[0], img_name);
 

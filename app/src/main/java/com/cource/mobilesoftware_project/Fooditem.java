@@ -5,14 +5,14 @@ public class Fooditem {
 
     String food_dates;
     String food_name;
-    String food_kcal;
-    int food_image_id;
+    int food_kcal;
+    String food_image_name;
 
-    public Fooditem(String date, String name, String kcal, int id) {
+    public Fooditem(String date, String name, int kcal, String ima) {
         this.food_dates = date;
         this.food_name = name;
         this.food_kcal = kcal;
-        this.food_image_id = id;
+        this.food_image_name = ima;
     }
 
     public String getDates() {
@@ -29,17 +29,15 @@ public class Fooditem {
         this.food_name = name;
     }
 
-    public String getKcal() {
+    public int getKcal() {
         return food_kcal;
     }
-    public void setKcal(String Kcal) {
+    public void setKcal(int Kcal) {
         this.food_kcal = Kcal;
     }
 
-    public int getImageID() {
-        return food_image_id;
-    }
-    public void setImageID(int id) {
-        this.food_image_id = id;
+    public String getImageID() {return food_image_name;}
+    public void setImageID(String ima) {
+        this.food_image_name = ima;
     }
 }

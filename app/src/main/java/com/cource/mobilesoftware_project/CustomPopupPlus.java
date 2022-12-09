@@ -3,6 +3,7 @@ package com.cource.mobilesoftware_project;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,10 +46,11 @@ public class CustomPopupPlus extends Dialog {
         TextView time =findViewById(R.id.Time);
         TextView food_category = findViewById(R.id.food_category);
 
+        textView5.setText(bundle.getString("food_name","food_name"));
         txt_contents.setText(bundle.getString("food_summary","food_summary"));
-        food_name.setText((bundle.getString("food_name","food_name")));
+        food_name.setText(bundle.getString("food_name","food_name"));
         int tmp= (bundle.getInt("food_cnt",0));
-        food_cnt.setText(String.valueOf(tmp));
+        food_cnt.setText("수량 : " + String.valueOf(tmp));
         TextView date = findViewById(R.id.Date);
         date.setText(bundle.getString("date","date"));
         time.setText((bundle.getString("time","time")));
@@ -56,5 +59,27 @@ public class CustomPopupPlus extends Dialog {
         byte[] byteArray = bundle.getByteArray("bm");
         Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         imageView.setImageBitmap(bitmap);   // 내부 저장소에 저장된 이미지를 이미지뷰에 셋
+
+        Button plus = (Button) findViewById(R.id.addPlus);
+        plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+                Intent intent = new Intent(context,PlusFoodActivity.class);
+                context.startActivity(intent);
+            }
+        });
+        Button show = (Button) findViewById(R.id.showFood);
+        show.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+                Intent intent = new Intent(context,ShowCalActivity.class);
+                context.startActivity(intent);
+            }
+        });
+
     }
+
+
 }
