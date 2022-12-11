@@ -3,7 +3,6 @@ package com.cource.mobilesoftware_project;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -30,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class ShowListActivity extends AppCompatActivity {
     private String TAG = ShowListActivity.class.getSimpleName();
@@ -60,21 +60,13 @@ public class ShowListActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
         adapter = new ListViewAdapter();
 
-        DietDBManager dbManager = new DietDBManager(this);
-        SQLiteDatabase db = dbManager.getWritableDatabase();
-        Cursor cursor = db.rawQuery("select * from Diet",null);
+        String[] columns = new String[]{"_id","date","time","food_category","food_name", "food_cnt", "food_kcal", "food_summary", "bm"};
+        Cursor cursor = getContentResolver().query(MyContentProvider.CONTENT_URI, columns, null, null, null, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                adapter.addItem(new Fooditem(cursor.getString(1), cursor.getString(4), 320, cursor.getString(8)));
+                adapter.addItem(new Fooditem(cursor.getString(1), cursor.getString(4), cursor.getInt(6), cursor.getBlob(8)));
             }
         }
-        else{
-            Context context = null;
-            Toast toast = Toast.makeText(context, "Something happens.", Toast.LENGTH_LONG);
-            toast.show();
-        }
-
-
 //                    tmp += "id: "+cursor.getInt(0)+"\ndate: "+cursor.getString(1)+"" +
 //                            "\ntime: " +cursor.getString(2)+"\nfood_category: "+cursor.getString(3)+
 //                            "\nfood_name: " +cursor.getString(4) +"\nfood_cnt: "+cursor.getInt(5)+"\nfood_calory: "+cursor.getInt(6)
@@ -136,8 +128,8 @@ public class ShowListActivity extends AppCompatActivity {
             list_name.setText(fooditem.getName());
             list_kcal.setText(String.valueOf(fooditem.getKcal()));
 
-            String imgpath = getFilesDir() + "/" + fooditem.getImageID();   // 내부 저장소에 저장되어 있는 이미지 경로
-            Bitmap bm = BitmapFactory.decodeFile(imgpath);
+//            String imgpath = getFilesDir() + "/" + fooditem.getImageID();   // 내부 저장소에 저장되어 있는 이미지 경로
+            Bitmap bm = BitmapFactory.decodeByteArray( fooditem.getImageID(), 0, fooditem.getImageID().length ) ;
             list_imageView.setImageBitmap(bm);
 
             Log.d(TAG, "getView() - [ "+position+" ] "+fooditem.getName());
@@ -147,11 +139,38 @@ public class ShowListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(context, fooditem.getDates()+" - "+fooditem.getName()+" 입니당! ", Toast.LENGTH_SHORT).show();
+
+                    final Bundle bundle = new Bundle();
+
+                    String[] columns = new String[]{"_id","date","time","food_category","food_name", "food_cnt", "food_kcal", "food_summary", "bm"};
+                    Cursor cursor = getContentResolver().query(MyContentProvider.CONTENT_URI, columns, MyContentProvider.NAME + "= \"" +  fooditem.getName() + "\" and " + MyContentProvider.DATE + "= \"" +  fooditem.getDates() + "\"", null, null);
+                    if (cursor != null) {
+                        while (cursor.moveToNext()) {
+                            bundle.putString("date",cursor.getString(1));
+                            bundle.putString("time",cursor.getString(2));
+                            bundle.putString("food_category",cursor.getString(3));
+                            bundle.putString("food_name",cursor.getString(4));
+                            bundle.putInt("food_cnt",cursor.getInt(5));
+                            bundle.putInt("food_kcal",cursor.getInt(6));
+                            bundle.putString("food_summary", cursor.getString(7));
+                            bundle.putByteArray("bm", cursor.getBlob(8));
+                            CustomPopupPlus customDialog = new CustomPopupPlus(ShowListActivity.this,bundle);
+                            customDialog.show();
+                        }
+                    }
                 }
             });
 
             return convertView;  //뷰 객체 반환
         }
+    }
+    public String bitmapToString(Bitmap bitmap){
+        String image = "";
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        image = Base64.getEncoder().encodeToString(byteArray);
+        return image;
     }
 
     public void goToCalView(View view){
@@ -159,15 +178,15 @@ public class ShowListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void btnOnclick(View view) {
-        switch (view.getId()){
-            case R.id.button:
+//    public void btnOnclick(View view) {
+//        switch (view.getId()){
+//            case R.id.button:
 //                customPopupPlus = new CustomPopupPlus(this,"다이어로그에 들어갈 내용입니다.");
 //                customPopupPlus.show();
-                break;
-
-        }
-    }
+//                break;
+//
+//        }
+//    }
 
     private void saveBitmapToJpeg(Bitmap bitmap, String name) {
         //내부저장소 캐시 경로를 받아옵니다.

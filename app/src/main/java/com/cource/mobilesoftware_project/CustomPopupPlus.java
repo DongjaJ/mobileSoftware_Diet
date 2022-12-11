@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -20,6 +21,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class CustomPopupPlus extends Dialog {
     private ImageButton shutdownClick;
@@ -45,6 +55,7 @@ public class CustomPopupPlus extends Dialog {
         TextView food_cnt = findViewById(R.id.food_cnt);
         TextView time =findViewById(R.id.Time);
         TextView food_category = findViewById(R.id.food_category);
+        TextView food_kcal = findViewById(R.id.food_kcal);
 
         textView5.setText(bundle.getString("food_name","food_name"));
         txt_contents.setText(bundle.getString("food_summary","food_summary"));
@@ -59,6 +70,8 @@ public class CustomPopupPlus extends Dialog {
         byte[] byteArray = bundle.getByteArray("bm");
         Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         imageView.setImageBitmap(bitmap);   // 내부 저장소에 저장된 이미지를 이미지뷰에 셋
+
+
 
         Button plus = (Button) findViewById(R.id.addPlus);
         plus.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +93,15 @@ public class CustomPopupPlus extends Dialog {
         });
 
     }
-
+//    private static void readCsvData(String path) throws IOException, CsvValidationException {
+//        CSVReader reader = new CSVReader(new FileReader(path));
+//        String[] nextLine;
+//        while ((nextLine = reader.readNext()) != null) {
+//            for (int i = 0; i< nextLine.length; i++) {
+//                System.out.print(nextLine[i] + " ");
+//            }
+//            System.out.println();
+//        }
+//    }
 
 }

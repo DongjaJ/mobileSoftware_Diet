@@ -44,18 +44,26 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Random;
 
 public class PlusFoodActivity extends AppCompatActivity {
 
     Calendar myCalendar = Calendar.getInstance();
+
+    ArrayList<KcalItem> kcalData = new ArrayList<>();
 
     DatePickerDialog.OnDateSetListener myDatePicker = (view, year, month, dayOfMonth) -> {
         myCalendar.set(Calendar.YEAR, year);
@@ -172,22 +180,27 @@ public class PlusFoodActivity extends AppCompatActivity {
             byte[] byteArray = stream.toByteArray() ;
             bundle.putByteArray("bm", byteArray);
 
-            DietDBManager dbManager = new DietDBManager(this);
-            SQLiteDatabase db = dbManager.getWritableDatabase();
+            //kcal data 가져오기
+            readKcalData();
+
+            int tmp_kcal = 400;
+            tmp_kcal = get_kcal(food_name);
+
+
             ContentValues addValues = new ContentValues();
-            addValues.put("date",date);
-            addValues.put("time",time);
-            addValues.put("food_category",food_category);
-            addValues.put("food_name",food_name);
-            addValues.put("food_cnt",food_cnt);
-            addValues.put("food_calory", 100);
-;           addValues.put("food_summary",food_summary);
-            addValues.put("img_name", img_name);
+            addValues.put(MyContentProvider.DATE,date);
+            addValues.put(MyContentProvider.TIME,time);
+            addValues.put(MyContentProvider.CATEGORY,food_category);
+            addValues.put(MyContentProvider.NAME,food_name);
+            addValues.put(MyContentProvider.CNT,food_cnt);
+            addValues.put(MyContentProvider.KCAL, tmp_kcal);
+;           addValues.put(MyContentProvider.SUMMERY,food_summary);
+            addValues.put(MyContentProvider.BYTE, byteArray);
 
             try {
                 Toast.makeText(getApplicationContext(), "파일 로드 성공", Toast.LENGTH_SHORT).show();
 
-                db.insert("Diet",null,addValues);
+                getContentResolver().insert(MyContentProvider.CONTENT_URI, addValues);
                 CustomPopupPlus customDialog = new CustomPopupPlus(PlusFoodActivity.this,bundle);
                 customDialog.show();
 //                Cursor cursor = db.rawQuery("select * from Diet",null);
@@ -269,5 +282,38 @@ public class PlusFoodActivity extends AppCompatActivity {
             }
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    //칼로리 가져오는 함수
+    private void readKcalData(){
+        InputStream is = getResources().openRawResource(R.raw.foods_kcal);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+
+        String line = "";
+        try{
+            while((line = reader.readLine()) != null){
+                String[] tokens = line.split(",");
+
+                KcalItem sample = new KcalItem();
+                sample.setIndex( Integer.parseInt(tokens[0]));
+                sample.setF_kcal( (int)(Float.parseFloat(tokens[1])));
+                sample.setF_name(tokens[2]);
+
+                kcalData.add(sample);
+
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private int get_kcal(String name){
+        Random random = new Random();
+        for(int i = 0; i < kcalData.size(); i++){
+            if(name.equals(kcalData.get(i).getF_name())){
+                return kcalData.get(i).getF_kcal();
+            }
+        }
+        return 350 - random.nextInt(200); //임의의 값
     }
 }

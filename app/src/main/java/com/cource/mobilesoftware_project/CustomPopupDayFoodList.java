@@ -112,8 +112,8 @@ public class CustomPopupDayFoodList extends Dialog {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view)  {
-                    customPopupPlus = new CustomPopupPlus(context, new Bundle());
-                    customPopupPlus.show();
+//                    customPopupPlus = new CustomPopupPlus(context, new Bundle());
+//                    customPopupPlus.show();
                 }
             });
 

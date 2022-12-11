@@ -6,9 +6,9 @@ public class Fooditem {
     String food_dates;
     String food_name;
     int food_kcal;
-    String food_image_name;
+    byte[] food_image_name;
 
-    public Fooditem(String date, String name, int kcal, String ima) {
+    public Fooditem(String date, String name, int kcal, byte[] ima) {
         this.food_dates = date;
         this.food_name = name;
         this.food_kcal = kcal;
@@ -36,8 +36,8 @@ public class Fooditem {
         this.food_kcal = Kcal;
     }
 
-    public String getImageID() {return food_image_name;}
-    public void setImageID(String ima) {
+    public byte[] getImageID() {return food_image_name;}
+    public void setImageID(byte[] ima) {
         this.food_image_name = ima;
     }
 }
