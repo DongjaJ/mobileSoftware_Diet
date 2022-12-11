@@ -178,7 +178,7 @@ public class ShowListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    public void btnOnclick(View view) {
+    public void btnOnclick(View view) {
 //        switch (view.getId()){
 //            case R.id.button:
 //                customPopupPlus = new CustomPopupPlus(this,"다이어로그에 들어갈 내용입니다.");
@@ -186,7 +186,7 @@ public class ShowListActivity extends AppCompatActivity {
 //                break;
 //
 //        }
-//    }
+    }
 
     private void saveBitmapToJpeg(Bitmap bitmap, String name) {
         //내부저장소 캐시 경로를 받아옵니다.
