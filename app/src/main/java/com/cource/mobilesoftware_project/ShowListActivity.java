@@ -184,7 +184,7 @@ public class ShowListActivity extends AppCompatActivity {
 //                customPopupPlus = new CustomPopupPlus(this,"다이어로그에 들어갈 내용입니다.");
 //                customPopupPlus.show();
 //                break;
-//
+
 //        }
     }
 
