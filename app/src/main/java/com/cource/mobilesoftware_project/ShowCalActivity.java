@@ -8,11 +8,14 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Calendar;
 
 public class ShowCalActivity extends AppCompatActivity {
 
@@ -21,7 +24,9 @@ public class ShowCalActivity extends AppCompatActivity {
     public CalendarView calendarView;
     public TextView diaryTextView;
 
-    private CustomPopupDayFoodList customPopupDayFood;
+    String year;
+    String month;
+    String days;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,30 +50,57 @@ public class ShowCalActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        //버튼 안보이게 하기
+
+        Button dayshow = (Button) findViewById(R.id.day_show);
+        Button monthlist = (Button) findViewById(R.id.month_list);
+
+        dayshow.setVisibility(View.GONE);
+        monthlist.setVisibility(View.GONE);
+
         //캘린더 설정
         calendarView = findViewById(R.id.calendarView);
-        diaryTextView = findViewById(R.id.diaryTextView);
+        Calendar calendar = Calendar.getInstance();
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener()
         {
             @Override
             @SuppressLint("DefaultLocale")
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
+            public void onSelectedDayChange(@NonNull CalendarView view, int y, int m, int d)
             {
-                diaryTextView.setVisibility(View.VISIBLE);
-                diaryTextView.setText(String.format("%d / %d / %d", year, month + 1, dayOfMonth));
-                btnOnclick(view, year, month, dayOfMonth);
+                year = Integer.toString(y);
+                month = Integer.toString(m + 1);
+                if(d < 10){
+                    days = "0"+ Integer.toString(d) ;
+                } else{
+                    days = Integer.toString(d);
+                }
+
+                dayshow.setVisibility(View.VISIBLE);
+                monthlist.setVisibility(View.VISIBLE);
+
+                dayshow.setOnClickListener(view1 -> {
+                    Intent intent = new Intent(getApplicationContext(), ShowDayListActivity.class);
+                    intent.putExtra("MONTH", month);
+                    intent.putExtra("YEARS", year);
+                    intent.putExtra("DAYS", days);
+                    startActivity(intent);
+                });
+
+                monthlist.setOnClickListener(view2 -> {
+                    Intent intent = new Intent(getApplicationContext(), ShowMonthListActivity.class);
+                    intent.putExtra("MONTH", month);
+                    intent.putExtra("YEARS", year);
+                    startActivity(intent);
+                });
             }
         });
+
     }
 
 
     public void goToListView(View view){
-        Intent intent = new Intent(this, ShowListActivity.class);
+        Intent intent = new Intent(this, ShowMonthListActivity.class);
         startActivity(intent);
-    }
-    public void btnOnclick(View view, int year, int month, int dayOfMonth) {
-        customPopupDayFood = new CustomPopupDayFoodList(this, year, month, dayOfMonth);
-        customPopupDayFood.show();
     }
 }

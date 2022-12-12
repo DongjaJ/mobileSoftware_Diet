@@ -91,18 +91,20 @@
 
                     <android.widget.Button
                         android:id="@+id/PopupButton"
-                        android:layout_width="65dp"
+                        android:layout_width="0dp"
                         android:layout_height="30dp"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@color/darkBrown"
-                        android:textColor="@color/mainLightYellow"
-                        android:text="식사 종류"
                         android:autoSizeTextType="uniform"
+                        android:background="@color/darkBrown"
                         android:padding="7dp"
+                        android:text="종류 입력"
+                        android:textColor="@color/mainLightYellow"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView"
                         app:layout_constraintStart_toStartOf="parent"
                         tools:ignore="MissingConstraints" />
 
@@ -117,7 +119,7 @@
                         android:background="@color/orange"
                         android:textColor="@color/mainLightYellow"
                         android:padding="7dp"
-                        android:text="@string/input"
+                        android:text="V"
                         android:autoSizeTextType="uniform"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -150,6 +152,29 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/back_icon" />
+
+                    <TextView
+                        android:id="@+id/place"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:maxLines="1"
+                        android:scrollbars="vertical"
+                        android:autoSizeTextType="uniform"
+                        android:background="@color/darkBrown"
+                        android:gravity="center"
+                        android:padding="7dp"
+                        android:text="장소 입력"
+                        android:textColor="@color/mainLightYellow"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/imageView" />
+
+
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainLightYellow"
-    tools:context=".ShowListActivity">
+    tools:context=".ShowMonthListActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
@@ -44,20 +44,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@string/app_name"
-                android:textSize="32.5sp"
-                android:textColor="@color/darkBrown"
                 android:fontFamily="@font/gmarketb"
+                android:text="@string/app_name"
+                android:textColor="@color/darkBrown"
+                android:textSize="32.5sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/showCal_explain" />
-
-            <Button
-                android:id="@+id/showCal_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="goToCalView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/showCal_logo" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -75,14 +67,47 @@
             <ListView
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
+                android:padding = "8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/show_date" />
+
+            <TextView
+                android:id="@+id/show_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/round_button_lightyellow"
+                android:fontFamily="@font/gmarketb"
+                android:gravity="center"
+                android:padding="7dp"
+                android:text="TextView"
+                android:textColor="@color/darkBrown"
+                app:layout_constraintBottom_toTopOf="@+id/listView"
+                app:layout_constraintEnd_toStartOf="@+id/textView4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/round_button_orange"
+                android:fontFamily="@font/gmarketb"
+                android:gravity="center"
+                android:padding="7dp"
+                android:text="TextView"
+                android:textColor="@color/brown"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

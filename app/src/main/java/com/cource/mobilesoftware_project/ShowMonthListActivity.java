@@ -1,5 +1,6 @@
 package com.cource.mobilesoftware_project;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,17 +31,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 
-public class ShowListActivity extends AppCompatActivity {
-    private String TAG = ShowListActivity.class.getSimpleName();
+public class ShowMonthListActivity extends AppCompatActivity {
+    private String TAG = ShowMonthListActivity.class.getSimpleName();
 
     private ListView listView = null;
     private ListViewAdapter adapter = null;
 
-    private CustomPopupPlus customPopupPlus;
-
+    @SuppressLint("SetTextI18n")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.show_list_activity);
+        setContentView(R.layout.show_month_list_activity);
 
         //글자 색 일부 변경
         TextView function_text = (TextView) findViewById(R.id.showCal_explain); //텍스트 변수 선언
@@ -60,11 +59,19 @@ public class ShowListActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
         adapter = new ListViewAdapter();
 
-        String[] columns = new String[]{"_id","date","time","food_category","food_name", "food_cnt", "food_kcal", "food_summary", "bm"};
+        Intent intent = getIntent();
+//        Toast.makeText(this, intent.getStringExtra("MONTH"), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, intent.getStringExtra("YEAR"), Toast.LENGTH_SHORT).show();
+
+        TextView month_view = (TextView)findViewById(R.id.textView3);
+        month_view.setText(intent.getStringExtra("YEARS") + " - " + intent.getStringExtra("MONTH"));
+
+        String[] columns = new String[]{"_id","date","time","food_category","food_name", "food_cnt", "food_kcal", "food_summary", "bm", "place", "latitude", "longitude"};
         Cursor cursor = getContentResolver().query(MyContentProvider.CONTENT_URI, columns, null, null, null, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                adapter.addItem(new Fooditem(cursor.getString(1), cursor.getString(4), cursor.getInt(6), cursor.getBlob(8)));
+                if (cursor.getString(1).split("-")[1].equals(intent.getStringExtra("MONTH")) && cursor.getString(1).split("-")[0].equals(intent.getStringExtra("YEARS")))
+                    adapter.addItem(new Fooditem(cursor.getString(1), cursor.getString(4), cursor.getInt(6), cursor.getBlob(8)));
             }
         }
 //                    tmp += "id: "+cursor.getInt(0)+"\ndate: "+cursor.getString(1)+"" +
@@ -93,7 +100,20 @@ public class ShowListActivity extends AppCompatActivity {
         }
 
         public void addItem(Fooditem item) {
-            items.add(item);
+            if(getCount() == 0)
+                items.add(item);
+            else{
+                if(item.getDates().compareTo(items.get(getCount()-1).getDates())>0){
+                    items.add(item);
+                }
+                else if(item.getDates().compareTo(items.get(getCount()-1).getDates())<0){
+                    int i = 1;
+                    while(item.getDates().compareTo(items.get(getCount()-i).getDates())>0){
+                        i +=1;
+                    }
+                    items.add(getCount()-i+1,item);
+                }
+            }
         }
 
         @Override
@@ -142,7 +162,7 @@ public class ShowListActivity extends AppCompatActivity {
 
                     final Bundle bundle = new Bundle();
 
-                    String[] columns = new String[]{"_id","date","time","food_category","food_name", "food_cnt", "food_kcal", "food_summary", "bm"};
+                    String[] columns = new String[]{"_id","date","time","food_category","food_name", "food_cnt", "food_kcal", "food_summary", "bm", "place", "latitude", "longitude"};
                     Cursor cursor = getContentResolver().query(MyContentProvider.CONTENT_URI, columns, MyContentProvider.NAME + "= \"" +  fooditem.getName() + "\" and " + MyContentProvider.DATE + "= \"" +  fooditem.getDates() + "\"", null, null);
                     if (cursor != null) {
                         while (cursor.moveToNext()) {
@@ -154,8 +174,12 @@ public class ShowListActivity extends AppCompatActivity {
                             bundle.putInt("food_kcal",cursor.getInt(6));
                             bundle.putString("food_summary", cursor.getString(7));
                             bundle.putByteArray("bm", cursor.getBlob(8));
-                            CustomPopupPlus customDialog = new CustomPopupPlus(ShowListActivity.this,bundle);
-                            customDialog.show();
+                            bundle.putString("place", cursor.getString(9));
+                            bundle.putString("latitude", cursor.getString(10));
+                            bundle.putString("longitude", cursor.getString(11));
+                            Intent intent = new Intent(getApplicationContext(), CustomPopup.class);
+                            intent.putExtra("Bundle", bundle);
+                            startActivity(intent);
                         }
                     }
                 }

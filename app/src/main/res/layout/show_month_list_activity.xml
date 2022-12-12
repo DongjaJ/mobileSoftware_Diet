@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainLightYellow"
-    tools:context=".ShowCalActivity">
+    tools:context=".ShowMonthListActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
@@ -51,6 +51,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/showCal_explain" />
 
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,77 +59,43 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/round_button_yellow"
-            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/showCal_cons"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toBottomOf="@id/showCal_cons">
 
-
-            <CalendarView
-                android:id="@+id/calendarView"
-                android:layout_width="0dp"
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/round_button_lightyellow"
-                app:layout_constraintBottom_toTopOf="@+id/day_show"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-            <android.widget.Button
-                android:id="@+id/day_show"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/round_button_lightyellow"
-                android:padding="4dp"
-                android:text="선택한 날 먹은 음식 보기"
-                app:layout_constraintBottom_toTopOf="@+id/month_list"
-                app:layout_constraintEnd_toEndOf="@+id/month_list"
-                app:layout_constraintStart_toStartOf="@+id/month_list"
-                app:layout_constraintTop_toBottomOf="@+id/calendarView" />
-
-            <android.widget.Button
-                android:id="@+id/month_list"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/round_button_lightyellow"
-                android:padding="4dp"
-                android:text="선택한 날짜의 월 전체 보기"
+                android:padding = "8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/day_show" />
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textView3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="4dp"
+                android:padding="7dp"
+                android:gravity="center"
                 android:background="@drawable/round_button_lightyellow"
                 android:fontFamily="@font/gmarketb"
-                android:gravity="center"
-                android:padding="7dp"
-                android:text="달력에서 날짜를 선택해주세요!"
-                android:textColor="@color/orange"
-                app:layout_constraintBottom_toTopOf="@+id/calendarView"
+                android:textColor="@color/darkBrown"
+                android:text="TextView"
+                app:layout_constraintBottom_toTopOf="@+id/listView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

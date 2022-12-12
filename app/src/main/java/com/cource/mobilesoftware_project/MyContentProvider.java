@@ -19,6 +19,10 @@ public class MyContentProvider extends ContentProvider {
     static final String SUMMERY = "food_summary";
     static final String KCAL = "food_kcal";
     static final String BYTE = "bm";
+    static final String PLACE= "place";
+    static final String LATITUDE = "latitude";
+    static final String LONGITUDE = "longitude";
+
 
     public DietDBManager dbManager;
     public MyContentProvider(){

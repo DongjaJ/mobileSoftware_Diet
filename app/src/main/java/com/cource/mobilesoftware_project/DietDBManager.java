@@ -16,7 +16,7 @@ public class DietDBManager extends SQLiteOpenHelper{
             + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
             + " date TEXT NOT NULL, time TEXT NOT NULL, food_category TEXT NOT NULL, "
             + "food_name TEXT NOT NULL, food_cnt INTEGER NOT NULL, food_kcal INTEGER NOT NULL, food_summary TEXT NOT NULL, " +
-            " bm BYTE NOT NULL);";
+            " bm BYTE NOT NULL, place TEXT NOT NULL, latitude TEXT NOT NULL, longitude TEXT NOT NULL) ;";
 
     public static DietDBManager getInstance(Context context) {
         if (dbManager == null) {

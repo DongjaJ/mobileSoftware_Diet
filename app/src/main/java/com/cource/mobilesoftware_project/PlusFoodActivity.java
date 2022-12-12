@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,11 +34,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -64,6 +68,9 @@ public class PlusFoodActivity extends AppCompatActivity {
     Calendar myCalendar = Calendar.getInstance();
 
     ArrayList<KcalItem> kcalData = new ArrayList<>();
+
+    private String latitude;
+    private String longitude;
 
     DatePickerDialog.OnDateSetListener myDatePicker = (view, year, month, dayOfMonth) -> {
         myCalendar.set(Calendar.YEAR, year);
@@ -155,23 +162,73 @@ public class PlusFoodActivity extends AppCompatActivity {
                             });
                 });
 
+        TextView place = findViewById(R.id.place);
+
+        ActivityResultLauncher<Intent> googleMapLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        Intent intent = result.getData();
+                        place.setText(intent.getStringExtra("place"));
+                        latitude = intent.getStringExtra("lati");
+                        longitude = intent.getStringExtra("longi");
+                    }
+                }
+        );
+
         findViewById(R.id.input).setOnClickListener(view -> {
 
             final Bundle bundle = new Bundle();
 
             String date=((EditText)findViewById(R.id.Date)).getText().toString();
-            bundle.putString("date",date);
             String time=((EditText)findViewById(R.id.Time)).getText().toString();
-            bundle.putString("time",time);
             String food_category= popupButton.getText().toString();
-            bundle.putString("food_category",food_category);
             String food_name = ((EditText)findViewById(R.id.food_name)).getText().toString();
-            bundle.putString("food_name",food_name);
-            Integer food_cnt = Integer.parseInt(((EditText)findViewById(R.id.food_cnt)).getText().toString());
-            bundle.putInt("food_cnt",food_cnt);
+            String food_cnt = ((EditText)findViewById(R.id.food_cnt)).getText().toString();
             String food_summary = ((EditText)findViewById(R.id.editTextTextMultiLine)).getText().toString();
-            bundle.putString("food_summary", food_summary);
             String img_name= date + time + "_"+food_category + ".jpg";
+            String place_string = place.getText().toString();
+
+            /*
+             * 입력 검사*/
+            if(food_category.equals("식사 종류")){
+                showWrongInput("식사 종류");
+                return;
+            }
+            if(place_string.equals("")){
+                showWrongInput("장소");
+                return;
+            }
+            if(food_name.equals("")){
+                showWrongInput("음식 이름");
+                return;
+            }
+            if(food_cnt.equals("")){
+                showWrongInput("음식 개수");
+                return;
+            }
+            if(date.equals("")){
+                showWrongInput("날짜");
+                return;
+            }
+            if(time.equals("")){
+                showWrongInput("시간");
+                return;
+            }
+            if(food_summary.equals("")){
+                showWrongInput("음식 설명");
+                return;
+            }
+
+            bundle.putString("date",date);
+            bundle.putString("time",time);
+            bundle.putString("food_category",food_category);
+            bundle.putString("food_name",food_name);
+            bundle.putInt("food_cnt",Integer.parseInt(food_cnt));
+            bundle.putString("food_summary", food_summary);
+            bundle.putString("latitude", latitude);
+            bundle.putString("longitude", longitude);
 
             saveBitmapToJpeg(img_bitmap[0], img_name);
 
@@ -186,33 +243,31 @@ public class PlusFoodActivity extends AppCompatActivity {
             int tmp_kcal = 400;
             tmp_kcal = get_kcal(food_name);
 
+            bundle.putInt("food_kcal", tmp_kcal);
+
 
             ContentValues addValues = new ContentValues();
             addValues.put(MyContentProvider.DATE,date);
             addValues.put(MyContentProvider.TIME,time);
             addValues.put(MyContentProvider.CATEGORY,food_category);
             addValues.put(MyContentProvider.NAME,food_name);
-            addValues.put(MyContentProvider.CNT,food_cnt);
+            addValues.put(MyContentProvider.CNT,Integer.parseInt(food_cnt));
             addValues.put(MyContentProvider.KCAL, tmp_kcal);
 ;           addValues.put(MyContentProvider.SUMMERY,food_summary);
             addValues.put(MyContentProvider.BYTE, byteArray);
+            addValues.put(MyContentProvider.PLACE, place_string);
+            addValues.put(MyContentProvider.LATITUDE, latitude);
+            addValues.put(MyContentProvider.LONGITUDE, longitude);
 
             try {
                 Toast.makeText(getApplicationContext(), "파일 로드 성공", Toast.LENGTH_SHORT).show();
 
                 getContentResolver().insert(MyContentProvider.CONTENT_URI, addValues);
-                CustomPopupPlus customDialog = new CustomPopupPlus(PlusFoodActivity.this,bundle);
-                customDialog.show();
-//                Cursor cursor = db.rawQuery("select * from Diet",null);
-//                while(cursor.moveToNext()){
-//                    tmp += "id: "+cursor.getInt(0)+"\ndate: "+cursor.getString(1)+"" +
-//                            "\ntime: " +cursor.getString(2)+"\nfood_category: "+cursor.getString(3)+
-//                            "\nfood_name: " +cursor.getString(4) +"\nfood_cnt: "+cursor.getInt(5)+"\nfood_calory: "+cursor.getInt(6)
-//                            +"\nfood_summary: " + cursor.getString(7) +"\nimg_name: " + cursor.getString(8)+"\n";
-//                }
-//
-//                ((EditText) findViewById(R.id.editTextTextMultiLine)).setText(tmp);
-
+//                CustomPopupPlus customDialog = new CustomPopupPlus(PlusFoodActivity.this,bundle);
+//                customDialog.show();
+                Intent intent = new Intent(getApplicationContext(), CustomPopup.class);
+                intent.putExtra("Bundle", bundle);
+                startActivity(intent);
             }
             catch (Exception e){
                 Toast.makeText(getApplicationContext(), "파일 로드 실패", Toast.LENGTH_SHORT).show();
@@ -225,9 +280,24 @@ public class PlusFoodActivity extends AppCompatActivity {
             intent.setType("image/*");
             galleryLauncher.launch(intent);
         });
+
+        findViewById(R.id.place).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PlusFoodActivity.this,GoogleMapActivity.class);
+                googleMapLauncher.launch(intent);
+            }
+        });
     }
 
-
+    private void showWrongInput(String input){
+        Log.d("wrong input2",input);
+        AlertDialog.Builder msgBuilder = new AlertDialog.Builder(this)
+                .setTitle("입력 오류!")
+                .setMessage(input+"을 입력하세요");
+        AlertDialog msgDlg = msgBuilder.create();
+        msgDlg.show();
+    }
 
     private void saveBitmapToJpeg(Bitmap bitmap, String name) {
         //내부저장소 캐시 경로를 받아옵니다.
