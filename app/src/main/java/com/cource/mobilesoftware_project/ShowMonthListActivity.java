@@ -103,16 +103,17 @@ public class ShowMonthListActivity extends AppCompatActivity {
             if(getCount() == 0)
                 items.add(item);
             else{
-                if(item.getDates().compareTo(items.get(getCount()-1).getDates())>0){
-                    items.add(item);
-                }
-                else if(item.getDates().compareTo(items.get(getCount()-1).getDates())<0){
-                    int i = 1;
-                    while(item.getDates().compareTo(items.get(getCount()-i).getDates())>0){
-                        i +=1;
+                int check = 0;
+                for(int i = 0; i < getCount(); i++){
+                    if(items.get(i).getDates().compareTo(item.getDates())>0){
+                        items.add(i, item);
+                        check = 1;
+                        break;
                     }
-                    items.add(getCount()-i+1,item);
                 }
+                if (check == 0)
+                    items.add(item);
+
             }
         }
 
