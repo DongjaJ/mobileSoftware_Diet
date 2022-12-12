@@ -25,3 +25,12 @@
    
 -------------
     ps. 구글맵 API 사용을 위해 개인이 키를 발급받아 입력해야 함
+    1. local.properties에 
+         MAPS_API_KEY="(key)"
+         PLACE_API_KEY="(key)" 입력,
+    2. Manifest의
+         <meta-data
+            android:name="android.app.lib_name"
+            android:value="(key)" /> 입력    
+    
+    
