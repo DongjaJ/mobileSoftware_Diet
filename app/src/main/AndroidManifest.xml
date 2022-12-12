@@ -25,7 +25,7 @@
             android:foregroundServiceType="location">
         <meta-data
                 android:name="android.app.lib_name"
-                android:value="AIzaSyDlb5R_zYGPNDPBJU-QYjNmhrDX0SrEzwE" />
+                android:value="" />
         </activity>
         <activity android:name=".StartActivity"
             android:exported="true">

@@ -563,7 +563,7 @@ public class GoogleMapActivity extends AppCompatActivity implements
                 .listener(GoogleMapActivity.this)
                 .key(BuildConfig.PLACE_API_KEY)
                 .latlng(location.latitude, location.longitude)//현재 위치
-                .radius(500) //500 미터 내에서 검색
+                .radius(1500) //500 미터 내에서 검색
                 .type(PlaceType.RESTAURANT) //음식점
                 .build()
                 .execute();

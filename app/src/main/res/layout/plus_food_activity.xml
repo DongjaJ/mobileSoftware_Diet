@@ -134,7 +134,7 @@
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/round_button_lightyellow"
                         android:padding="8dp"
-                        android:src="@drawable/ic_launcher_background"
+                        app:srcCompat="@drawable/gallery"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

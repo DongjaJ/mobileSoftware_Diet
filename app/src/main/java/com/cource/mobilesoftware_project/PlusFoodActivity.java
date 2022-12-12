@@ -243,7 +243,7 @@ public class PlusFoodActivity extends AppCompatActivity {
             int tmp_kcal = 400;
             tmp_kcal = get_kcal(food_name);
 
-            bundle.putInt("food_kcal", tmp_kcal);
+            bundle.putInt("food_kcal", tmp_kcal * Integer.parseInt(food_cnt));
 
 
             ContentValues addValues = new ContentValues();
@@ -252,7 +252,7 @@ public class PlusFoodActivity extends AppCompatActivity {
             addValues.put(MyContentProvider.CATEGORY,food_category);
             addValues.put(MyContentProvider.NAME,food_name);
             addValues.put(MyContentProvider.CNT,Integer.parseInt(food_cnt));
-            addValues.put(MyContentProvider.KCAL, tmp_kcal);
+            addValues.put(MyContentProvider.KCAL, tmp_kcal * Integer.parseInt(food_cnt));
 ;           addValues.put(MyContentProvider.SUMMERY,food_summary);
             addValues.put(MyContentProvider.BYTE, byteArray);
             addValues.put(MyContentProvider.PLACE, place_string);
@@ -260,7 +260,7 @@ public class PlusFoodActivity extends AppCompatActivity {
             addValues.put(MyContentProvider.LONGITUDE, longitude);
 
             try {
-                Toast.makeText(getApplicationContext(), "파일 로드 성공", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "파일 로드 성공", Toast.LENGTH_SHORT).show();
 
                 getContentResolver().insert(MyContentProvider.CONTENT_URI, addValues);
 //                CustomPopupPlus customDialog = new CustomPopupPlus(PlusFoodActivity.this,bundle);
@@ -268,6 +268,7 @@ public class PlusFoodActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), CustomPopup.class);
                 intent.putExtra("Bundle", bundle);
                 startActivity(intent);
+                finish();
             }
             catch (Exception e){
                 Toast.makeText(getApplicationContext(), "파일 로드 실패", Toast.LENGTH_SHORT).show();

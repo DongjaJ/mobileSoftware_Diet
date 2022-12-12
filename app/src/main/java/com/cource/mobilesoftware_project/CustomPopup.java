@@ -95,6 +95,7 @@ public class CustomPopup extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),PlusFoodActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         Button show = (Button) findViewById(R.id.showFood);
@@ -103,6 +104,7 @@ public class CustomPopup extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),ShowCalActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
